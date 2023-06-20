@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'RegisterScreen.dart';
+import 'SignIn.dart';
 
 class ForgotPassScreen extends StatefulWidget {
   const ForgotPassScreen({super.key});
@@ -110,7 +111,13 @@ class _ForgotPassScreenState extends State<ForgotPassScreen> {
                         width: MediaQuery.of(context).size.width,
                         height: 50,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const SignInScreen(),
+                              ),
+                            );
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.deepOrangeAccent,
                             shape: RoundedRectangleBorder(

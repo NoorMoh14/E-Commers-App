@@ -20,7 +20,7 @@ class ECommerceApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      home: const SignInScreen(),
+      home: const SplashScreen(),
     );
   }
 }

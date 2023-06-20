@@ -2,6 +2,7 @@ import 'package:e_commerce_app/Screens/ForgotPassScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import 'Home.dart';
 import 'RegisterScreen.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -201,7 +202,13 @@ class _SignInScreenState extends State<SignInScreen> {
                         width: MediaQuery.of(context).size.width,
                         height: 50,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                              builder: (context) => const HomeScreen(),
+                              ),
+                            );
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.deepOrangeAccent,
                             shape: RoundedRectangleBorder(
