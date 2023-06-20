@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'RegisterScreen.dart';
+import 'Screens/CompleteProfileScreen.dart';
+import 'Screens/ForgotPassScreen.dart';
+import 'Screens/RegisterScreen.dart';
+import 'Screens/SignIn.dart';
+import 'Screens/Splash.dart';
 
 void main() {
   runApp(const ECommerceApp());
@@ -16,7 +20,7 @@ class ECommerceApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      home: const RegisterScreen(),
+      home: const SignInScreen(),
     );
   }
 }
