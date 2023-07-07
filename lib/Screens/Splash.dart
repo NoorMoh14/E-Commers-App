@@ -1,6 +1,9 @@
+import 'package:banner_carousel/banner_carousel.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'Home.dart';
 import 'SignIn.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -12,7 +15,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   int current = 0;
-  final CarouselController controller = CarouselController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,53 +41,40 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
               ),
               const SizedBox(height: 60,),
-              CarouselSlider(
-                carouselController: controller,
-                options: CarouselOptions(
-                  enlargeCenterPage: true,
-                  onPageChanged: (index, reason) {
-                    setState(() {
-                      current = index;
-                    });
-                    },
-                  autoPlay: true,
-                  height: MediaQuery.of(context).size.height / 3.5,
+              BannerCarousel(
+                height: 350,
+                activeColor: Colors.deepOrangeAccent,
+                customizedBanners: List.generate(
+                  3, (index) => Container(
+                  margin: EdgeInsets.only(bottom: 60),
+                  child: Image.asset('assets/images/splash_${index + 1}.png'),
                 ),
-                items: [1, 2, 3,].map((i) {
-                  return Builder(
-                    builder: (BuildContext context) {
-                      return Image.asset('assets/images/splash_$i.png');
-                    },
-                  );
-                }).toList(),
-              ),
-              const SizedBox(height: 50,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [0, 1, 2,].asMap().entries.map((entry) {
-                  return Container(
-                    width: 10,
-                    height: 10,
-                    margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0,),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.deepOrangeAccent.withOpacity(
-                          current == entry.value ? 1 : 0.2),
-                    ),
-                  );
-                }).toList(),
+                ),
               ),
               Container(
-                margin: const EdgeInsets.only(top: 150,right:5 ,left: 5),
+                margin: const EdgeInsets.only(top: 100,right:5 ,left: 5),
                 width: MediaQuery.of(context).size.width,
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const SignInScreen(),
-                      ),
-                    );
+                    if (FirebaseAuth.instance.currentUser == null) {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const SignInScreen(),
+                        ),
+                      );
+                    } else {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const Home(),
+                        ),
+                      );
+                    }
+                    // Navigator.of(context).push(
+                    //   MaterialPageRoute(
+                    //     builder: (context) => const SignInScreen(),
+                    //   ),
+                    // );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.deepOrangeAccent,

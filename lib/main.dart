@@ -1,13 +1,11 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
-import 'Screens/CompleteProfileScreen.dart';
-import 'Screens/ForgotPassScreen.dart';
-import 'Screens/RegisterScreen.dart';
-import 'Screens/SignIn.dart';
 import 'Screens/Splash.dart';
 
-void main() {
-  runApp(const ECommerceApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(ECommerceApp());
 }
 
 class ECommerceApp extends StatelessWidget {
@@ -20,7 +18,7 @@ class ECommerceApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      home: const SplashScreen(),
+      home:  SplashScreen(),
     );
   }
 }
