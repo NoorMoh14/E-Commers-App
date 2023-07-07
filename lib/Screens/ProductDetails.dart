@@ -87,11 +87,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                     ),
                   );
                 }
-                return Center(
-                  child: CircularProgressIndicator(
-                    strokeWidth: 5,
-                  ),
-                );
+                return SizedBox();
               }),
 
         ],
