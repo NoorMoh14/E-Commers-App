@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:http/http.dart' as http;
 
@@ -17,6 +18,8 @@ class ProductsScreen extends StatefulWidget {
 }
 
 class _ProductsScreenState extends State<ProductsScreen> {
+  Map<String, dynamic> list = {};
+
   late Future<List<Products>> futureProducts;
 
   Future<List<Products>> fetchData() async {
@@ -35,8 +38,16 @@ class _ProductsScreenState extends State<ProductsScreen> {
     }
   }
 
+  getData() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      list = json.decode(prefs.getString('favorite').toString());
+    });
+  }
+
   @override
   void initState() {
+    getData();
     super.initState();
     futureProducts = fetchData();
   }
@@ -76,12 +87,15 @@ class _ProductsScreenState extends State<ProductsScreen> {
                           childAspectRatio: 1 / 1.5),
                       itemCount: data!.length,
                       itemBuilder: (context, index) => GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
+                        onTap: () async {
+                          await Navigator.of(context)
+                              .push(MaterialPageRoute(
                             builder: (context) => ProductDetails(
-                              id: data[index].id,
+                              id: data[index].id.toString(),
+                              data: data[index],
                             ),
                           ));
+                          getData();
                         },
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

@@ -46,6 +46,7 @@ dependencies:
   cloud_firestore: ^4.8.1
   shared_preferences: ^2.1.2
   banner_carousel: ^1.2.1
+  lottie: ^2.4.0
 
 dev_dependencies:
   flutter_test:

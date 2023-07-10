@@ -3,23 +3,21 @@ class Products {
   final String title;
   final String image;
   final double price;
-  final Map<String, dynamic> rating;
+  final double rate;
 
-  const Products(
+  Products(
       {required this.id,
         required this.title,
         required this.image,
         required this.price,
-        required this.rating,
-      });
+        required this.rate});
 
   factory Products.fromJson(Map<String, dynamic> json) {
     return Products(
         id: json['id'],
         title: json['title'],
         image: json['image'],
-        price: double.parse(json['price'].toString()),
-        rating: json['rating'],
-    );
+        rate: double.parse(json['rating']['rate'].toString()),
+        price: double.parse(json['price'].toString()));
   }
 }
