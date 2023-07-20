@@ -73,38 +73,6 @@ class ProfileScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                ListTile(
-                  leading: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: CircleAvatar(
-                      radius: 30,
-                      backgroundColor: Colors.deepOrange.shade50,
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: SvgPicture.asset(
-                          'assets/icons/Bell.svg',
-                          // ignore: deprecated_member_use
-                          color: Colors.deepOrangeAccent,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ),
-                  ),
-                  title: Text(
-                    'Notifications',
-                    style: TextStyle(
-                      fontSize: 18,
-                    ),
-                  ),
-                  trailing: Padding(
-                    padding: EdgeInsets.only(right: 10),
-                    child: Icon(
-                      Icons.arrow_forward_ios,
-                      color: Colors.black,
-                      size: 20,
-                    ),
-                  ),
-                ),
                 Divider(
                   color: Colors.deepOrangeAccent.shade100,
                   endIndent: 30,
@@ -137,7 +105,7 @@ class ProfileScreen extends StatelessWidget {
                     padding: EdgeInsets.only(right: 10),
                     child: Icon(
                       Icons.arrow_forward_ios,
-                      color: Colors.black,
+                      color: Colors.deepOrangeAccent,
                       size: 20,
                     ),
                   ),
@@ -175,7 +143,7 @@ class ProfileScreen extends StatelessWidget {
                     padding: EdgeInsets.only(right: 10),
                     child: Icon(
                       Icons.arrow_forward_ios,
-                      color: Colors.black,
+                      color: Colors.deepOrangeAccent,
                       size: 20,
                     ),
                   ),
@@ -213,14 +181,6 @@ class ProfileScreen extends StatelessWidget {
                       fontSize: 18,
                     ),
                   ),
-                  // trailing: Padding(
-                  //   padding: EdgeInsets.only(right: 10),
-                  //   child: Icon(
-                  //     Icons.arrow_forward_ios,
-                  //     color: Colors.black,
-                  //     size: 20,
-                  //   ),
-                  // ),
                 ),
               ],
             ),

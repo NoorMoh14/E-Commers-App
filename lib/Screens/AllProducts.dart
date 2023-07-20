@@ -1,11 +1,14 @@
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:http/http.dart' as http;
 
 import '../Models/ProductsModel.dart';
+import '../main.dart';
 import 'ProductDetails.dart';
 
 // ignore: must_be_immutable
@@ -17,6 +20,7 @@ class ProductsScreen extends StatefulWidget {
 }
 
 class _ProductsScreenState extends State<ProductsScreen> {
+  Map<String, dynamic> list = {};
   late Future<List<Products>> futureProducts;
 
   Future<List<Products>> fetchData() async {
@@ -35,8 +39,16 @@ class _ProductsScreenState extends State<ProductsScreen> {
     }
   }
 
+  getData() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      list = json.decode(prefs.getString('favorite').toString());
+    });
+  }
+
   @override
   void initState() {
+    getData();
     super.initState();
     futureProducts = fetchData();
   }
@@ -52,12 +64,11 @@ class _ProductsScreenState extends State<ProductsScreen> {
               },
               icon: Icon(
                 Icons.arrow_back_ios,
-                color: Colors.black,
+                color:  ECommerceApp.themeNotifier.value == ThemeMode.light ? Colors.black : Colors.white,
               )),
           backgroundColor: Colors.transparent,
           title: Text(
             'All products',
-            style: TextStyle(color: Colors.black),
           ),
         ),
         body: FutureBuilder<List<Products>>(
@@ -67,7 +78,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                 var data = snapshot.data;
 
                 return Padding(
-                  padding: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.only(top: 10,bottom: 10, left: 20),
                   child: GridView.builder(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
@@ -76,19 +87,22 @@ class _ProductsScreenState extends State<ProductsScreen> {
                           childAspectRatio: 1 / 1.5),
                       itemCount: data!.length,
                       itemBuilder: (context, index) => GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
+                        onTap: () async {
+                          await Navigator.of(context)
+                              .push(MaterialPageRoute(
                             builder: (context) => ProductDetails(
-                              id: data[index].id,
+                              id: data[index].id.toString(),
+                              data: data[index],
                             ),
                           ));
+                          getData();
                         },
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              height: 180,
-                              width: 180,
+                              height: 160,
+                              width: 160,
                               padding: const EdgeInsets.all(25),
                               decoration: BoxDecoration(
                                 border: Border.all(
@@ -111,11 +125,12 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                               BorderRadius.all(
                                                   Radius.circular(50))),
                                         )),
-                                width: 240,
+                                width: 250,
                               ),
                             ),
                             SizedBox(
-                              width: MediaQuery.of(context).size.width / 2.5,
+                              width:
+                              MediaQuery.of(context).size.width / 2.5,
                               child: ListTile(
                                 contentPadding:
                                 const EdgeInsets.only(top: 10),
@@ -123,7 +138,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                   data[index].title,
                                   maxLines: 2,
                                   style: const TextStyle(
-                                    fontSize: 15,
+                                    fontSize: 16,
                                   ),
                                 ),
                                 subtitle: Padding(
@@ -137,20 +152,58 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                         style: const TextStyle(
                                           color: Colors.deepOrangeAccent,
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 18,
+                                          fontSize: 20,
                                         ),
                                       ),
                                       CircleAvatar(
-                                        radius: 14,
-                                        backgroundColor: index == 0
+                                        radius: 15,
+                                        backgroundColor: list.containsKey(
+                                            data[index].id.toString())
                                             ? Colors.red.shade100
                                             : Colors.grey.shade200,
                                         child: IconButton(
-                                          onPressed: () {},
+                                          onPressed: () async {
+                                            final SharedPreferences prefs =
+                                            await SharedPreferences
+                                                .getInstance();
+
+                                            if (list.containsKey(data[index]
+                                                .id
+                                                .toString())) {
+                                              list.remove(data[index]
+                                                  .id
+                                                  .toString());
+                                            } else {
+                                              list.putIfAbsent(
+                                                  data[index].id.toString(),
+                                                      () => {
+                                                    'title': data[index]
+                                                        .title,
+                                                    'price': data[index]
+                                                        .price,
+                                                    'image': data[index]
+                                                        .image,
+                                                    'rate':
+                                                    data[index].rate
+                                                  });
+                                            }
+
+                                            setState(() {});
+
+                                            String encodedMap =
+                                            json.encode(list);
+                                            setState(() {});
+
+                                            prefs.setString(
+                                                'favorite', encodedMap);
+                                          },
                                           icon: SvgPicture.asset(
                                             'assets/icons/Heart Icon_2.svg',
                                             // ignore: deprecated_member_use
-                                            color: index == 0
+                                            color: list.containsKey(
+                                                data[index]
+                                                    .id
+                                                    .toString())
                                                 ? Colors.red
                                                 : Colors.grey,
                                           ),

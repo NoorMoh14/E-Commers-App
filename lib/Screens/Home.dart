@@ -30,9 +30,12 @@ class _HomeState extends State<Home> {
       bottomNavigationBar: Container(
         padding: const EdgeInsets.only(top: 10, bottom: 10),
         decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+           // color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+        ),
         child: SafeArea(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

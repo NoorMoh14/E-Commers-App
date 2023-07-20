@@ -1,14 +1,14 @@
 import 'dart:convert';
 import 'package:e_commerce_app/Screens/ProductDetails.dart';
 import 'package:e_commerce_app/Screens/AllProducts.dart';
+import 'package:e_commerce_app/main.dart';
 import 'package:http/http.dart' as http;
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
-
 import '../Models/ProductsModel.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -20,7 +20,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   var search = TextEditingController(),
-      index = 0,
+
+      list = {},
       cat = [
         {'title': 'Flash\nDeal', 'icon': 'Flash Icon'},
         {'title': 'Bill\n', 'icon': 'Bill Icon'},
@@ -51,6 +52,19 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  getData() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      list = json.decode(prefs.getString('favorite').toString());
+    });
+  }
+
+  @override
+  void initState() {
+    getData();
+    super.initState();
+    futureProducts = fetchProducts();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,13 +79,15 @@ class _HomeScreenState extends State<HomeScreen> {
               radius: 25,
               backgroundColor: Colors.grey.shade200,
               child: IconButton(
-                onPressed: () {},
-                icon: SvgPicture.asset(
-                  'assets/icons/Cart Icon.svg',
-                  // ignore: deprecated_member_use
-                  color: index == 4 ? Colors.deepOrangeAccent : Colors.black,
-                ),
-              ),
+                  icon: Icon(ECommerceApp.themeNotifier.value == ThemeMode.light
+                      ? Icons.light_mode
+                      : Icons.dark_mode),
+                  onPressed: () {
+                    print(ECommerceApp.themeNotifier.value);
+                    ECommerceApp.themeNotifier.value =
+                    ECommerceApp.themeNotifier.value == ThemeMode.light
+                        ? ThemeMode.dark : ThemeMode.light;
+                  }),
             ),
           ),
           const SizedBox(
@@ -93,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   icon: SvgPicture.asset(
                     'assets/icons/Bell.svg',
                     // ignore: deprecated_member_use
-                    color: index == 5 ? Colors.deepOrangeAccent : Colors.black,
+                   // color: Colors.black,
                   ),
                 ),
               ),
@@ -115,6 +131,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 border: InputBorder.none,
                 prefixIcon: Icon(Icons.search),
                 hintText: 'Search product',
+                hintStyle: TextStyle(
+                  color: Colors.black38,
+                )
               )),
         ),
       ),
@@ -226,7 +245,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         Radius.circular(20)),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Colors.black.withOpacity(0.15),
+                                        color: Colors.black.withOpacity(.5),
                                       ),
                                     ],
                                   ),
@@ -236,11 +255,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                     MediaQuery.of(context).size.width / 1.4,
                                     child: ListTile(
                                         title: Text(
-                                          cat[index].title,
+                                          cat[index].category,
                                           style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 22,
-                                              fontWeight: FontWeight.bold),
+                                            color: Colors.white,
+                                            fontSize: 23,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                         contentPadding: const EdgeInsets.only(
                                             top: 10, left: 25),
@@ -254,7 +274,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                               fontSize: 16,
                                             ),
                                           ),
-                                        ))),
+                                        )),
+                                ),
                               ],
                             );
                           },
@@ -318,12 +339,15 @@ class _HomeScreenState extends State<HomeScreen> {
                           itemCount: pop!.length == 0 ? 0 : 3,
                           itemBuilder: (context, index) {
                             return GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
+                              onTap: ()  async {
+                                await Navigator.of(context)
+                                    .push(MaterialPageRoute(
                                   builder: (context) => ProductDetails(
-                                    id: pop[index].id,
+                                    id: pop[index].id.toString(),
+                                    data: pop[index],
                                   ),
                                 ));
+                                getData();
                               },
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -384,19 +408,45 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 fontSize: 20,
                                               ),
                                             ),
-                                            CircleAvatar(
-                                              radius: 15,
-                                              backgroundColor: index == 0
-                                                  ? Colors.red.shade50
-                                                  : Colors.grey.shade200,
-                                              child: IconButton(
-                                                onPressed: () {},
-                                                icon: SvgPicture.asset(
-                                                  'assets/icons/Heart Icon_2.svg',
-                                                  // ignore: deprecated_member_use
-                                                  color: index == 0
-                                                      ? Colors.red
-                                                      : Colors.grey,
+                                            RefreshIndicator(
+                                              onRefresh: () async {
+                                                getData();
+                                              },
+                                              child: CircleAvatar(
+                                                radius: 15,
+                                                backgroundColor: list.containsKey(
+                                                    pop[index].id.toString())
+                                                    ? Colors.red.shade100
+                                                    : Colors.grey.shade200,
+                                                child: IconButton(
+                                                  onPressed: ()async {
+                                                    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+                                                    setState(() {
+                                                      if (list.containsKey(pop[index].id.toString())) {
+                                                        list.remove(pop[index].id.toString());
+                                                      } else {
+                                                        list.putIfAbsent(
+                                                            pop[index].id.toString(), () => {
+                                                          'title': pop[index].title,
+                                                          'price': pop[index].price,
+                                                          'image': pop[index].image,
+                                                          'rate': pop[index].rate
+                                                        });
+                                                      }
+
+                                                      String encodedMap = json.encode(list);
+                                                      prefs.setString('favorite', encodedMap);
+                                                    });
+
+                                                  },
+                                                  icon: SvgPicture.asset(
+                                                    'assets/icons/Heart Icon_2.svg',
+                                                    color:  list.containsKey(
+                                                        pop[index].id.toString())
+                                                        ? Colors.red
+                                                        : Colors.grey,
+                                                  ),
                                                 ),
                                               ),
                                             ),
@@ -431,9 +481,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                     color: Colors.amber,
                                     borderRadius:
                                     BorderRadius.all(Radius.circular(20))),
-                              )),
-                        ));
-                  }),
+                              ),
+                          ),
+                        ),
+                    );
+                  }
+                  ),
             ],
           ),
         ),
