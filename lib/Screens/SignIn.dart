@@ -121,23 +121,11 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        leading: IconButton(
-          onPressed: (){
-            Navigator.pop(context);
-          },
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.black,
-          ),
-        ),
-      ),
+     // backgroundColor: Colors.white,
+
       body: SafeArea(
         child: Padding(
-        padding: const EdgeInsets.only(top: 20, right: 20, left: 20),
+        padding: const EdgeInsets.only(top: 70, right: 20, left: 20),
           child: SingleChildScrollView(
             child: Form(
               key: key,
@@ -149,7 +137,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.w500,
-                    color: Colors.black,
+                   // color: Colors.black,
                     letterSpacing: .5,
                   ),
                 ),
@@ -332,180 +320,14 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                     ) : Text(
                       'Continue',
-                      style: TextStyle(fontSize: 20),
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white
+                      ),
                     ),
                   ),
                 ),
-                // Padding(
-                //   padding: EdgeInsets.symmetric(horizontal: 20),
-                //   child: Column(
-                //     children: [
-                //       TextField(
-                //         maxLines: 1,
-                //         decoration: InputDecoration(
-                //           enabledBorder: OutlineInputBorder(
-                //             gapPadding: 10,
-                //             borderRadius: BorderRadius.all(Radius.circular(40)),
-                //             borderSide: BorderSide(
-                //               color: Colors.grey,
-                //               width: 1.5,
-                //             ),
-                //           ),
-                //           floatingLabelBehavior: FloatingLabelBehavior.always,
-                //           contentPadding: const EdgeInsets.symmetric(
-                //             horizontal: 45,
-                //             vertical: 25,
-                //           ),
-                //           border: OutlineInputBorder(
-                //             gapPadding: 10,
-                //             borderRadius:
-                //             const BorderRadius.all(Radius.circular(40)),
-                //             borderSide: BorderSide(
-                //               color: Colors.grey.shade800,
-                //               width: 1.5,
-                //             ),
-                //           ),
-                //           labelText: 'Email',
-                //           labelStyle: TextStyle(
-                //             color: Colors.grey,
-                //             fontWeight: FontWeight.bold,
-                //           ),
-                //           hintText: 'Enter your email',
-                //           hintStyle: TextStyle(
-                //             color: Colors.grey,
-                //             fontWeight: FontWeight.w500,
-                //             wordSpacing: 2,
-                //             letterSpacing: .5,
-                //           ),
-                //           suffixIcon: Padding(
-                //             padding: const EdgeInsets.only(right: 20 ,top: 14, bottom: 14 ),
-                //             child: SvgPicture.asset(
-                //               "assets/icons/Mail.svg",
-                //               fit: BoxFit.contain,
-                //             ),
-                //           ),
-                //         ),
-                //       ),
-                //       SizedBox(height: 20,),
-                //       TextField(
-                //         maxLines: 1,
-                //         decoration: InputDecoration(
-                //           enabledBorder: OutlineInputBorder(
-                //             gapPadding: 10,
-                //             borderRadius: BorderRadius.all(Radius.circular(40)),
-                //             borderSide: BorderSide(
-                //               color: Colors.grey,
-                //               width: 1.5,
-                //             ),
-                //           ),
-                //           floatingLabelBehavior: FloatingLabelBehavior.always,
-                //           contentPadding: const EdgeInsets.symmetric(
-                //             horizontal: 45,
-                //             vertical: 25,
-                //           ),
-                //           border: OutlineInputBorder(
-                //             gapPadding: 10,
-                //             borderRadius:
-                //             const BorderRadius.all(Radius.circular(40)),
-                //             borderSide: BorderSide(
-                //               color: Colors.grey.shade800,
-                //               width: 1.5,
-                //             ),
-                //           ),
-                //           labelText: 'Password',
-                //           labelStyle: TextStyle(
-                //             color: Colors.grey,
-                //             fontWeight: FontWeight.bold,
-                //           ),
-                //           hintText: 'Enter your Password',
-                //           hintStyle: TextStyle(
-                //             color: Colors.grey,
-                //             fontWeight: FontWeight.w500,
-                //             wordSpacing: 2,
-                //             letterSpacing: .5,
-                //           ),
-                //           suffixIcon: Padding(
-                //             padding: const EdgeInsets.only(right: 20, top: 14, bottom: 14),
-                //             child: SvgPicture.asset(
-                //               "assets/icons/Lock.svg",
-                //               fit: BoxFit.contain,
-                //             ),
-                //           ),
-                //         ),
-                //       ),
-                //       Container(
-                //         margin: const EdgeInsets.only(top: 30),
-                //         child: Row(
-                //           children: [
-                //             Checkbox(
-                //               activeColor: Colors.deepOrangeAccent,
-                //               value: remember,
-                //               onChanged: (value) {
-                //                 setState(() {
-                //                   remember = !remember;
-                //                 });
-                //               },
-                //             ),
-                //             const Text(
-                //               'Remember me',
-                //               style: TextStyle(
-                //                 color: Colors.grey,
-                //                 fontSize: 15,
-                //                 fontWeight: FontWeight.w500,
-                //                 letterSpacing: .5,
-                //               ),
-                //             ),
-                //             const Spacer(),
-                //             TextButton(
-                //               onPressed: () {
-                //                 Navigator.of(context).push(MaterialPageRoute(
-                //                     builder: (context) => const ForgotPassScreen()));
-                //               },
-                //               child: Text(
-                //                 'Forgot Password',
-                //                 textAlign: TextAlign.center,
-                //                 style: TextStyle(
-                //                   color: Colors.grey,
-                //                   fontWeight: FontWeight.w500,
-                //                   decoration: TextDecoration.underline,
-                //                 ),
-                //               ),
-                //             )
-                //           ],
-                //         ),
-                //       ),
-                //       SizedBox(height: 20,),
-                //       Container(
-                //         width: MediaQuery.of(context).size.width,
-                //         height: 50,
-                //         child: ElevatedButton(
-                //           onPressed: () {
-                //             Navigator.of(context).push(
-                //               MaterialPageRoute(
-                //               builder: (context) => const Home(),
-                //               ),
-                //             );
-                //           },
-                //           style: ElevatedButton.styleFrom(
-                //             backgroundColor: Colors.deepOrangeAccent,
-                //             shape: RoundedRectangleBorder(
-                //               borderRadius: BorderRadius.circular(20),
-                //             ),
-                //           ),
-                //           child: const Text(
-                //             'Continue',
-                //             style: TextStyle(
-                //               fontSize: 20,
-                //               fontWeight: FontWeight.w400,
-                //               letterSpacing: .5,
-                //             ),
-                //           ),
-                //         ),
-                //       ),
-                //       SizedBox(height: 50,),
-                //     ],
-                //   ),
-                // ),
+
                 Container(
                   margin: const EdgeInsets.only(top:60, bottom: 10),
                   alignment: Alignment.center,

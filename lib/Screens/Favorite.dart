@@ -58,8 +58,8 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           backgroundColor: Colors.transparent,
           title: Text(
             'Favorites',
-            style: TextStyle(color: Colors.black),
           ),
+          leading: Container(),
         ),
         body: list.length == 0
             ? RefreshIndicator(
@@ -76,7 +76,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           ),
         )
             : Padding(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.only(top: 10,left: 20,bottom: 10),
           child: RefreshIndicator(
             onRefresh: () async {
               getData();
@@ -84,9 +84,9 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    childAspectRatio: 1 / 1.4),
+                    crossAxisSpacing: 20,
+                    mainAxisSpacing: 20,
+                    childAspectRatio: 1 / 1.5),
                 itemCount: list.length,
                 itemBuilder: (context, index) => GestureDetector(
                   onTap: () async {
@@ -96,14 +96,12 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                         id: list.keys.toList()[index],
                         data: Products(
                             id: int.parse(list.keys.toList()[index]),
-                            title: list.values.toList()[index]
-                            ['title'],
-                            image: list.values.toList()[index]
-                            ['image'],
-                            price: list.values.toList()[index]
-                            ['price'],
-                            rate: list.values.toList()[index]
-                            ['rate']),
+                            title: list.values.toList()[index]['title'],
+                          category: list.values.toList()[index]['category'],
+                            image: list.values.toList()[index]['image'],
+                            price: list.values.toList()[index]['price'],
+                            rate: list.values.toList()[index]['rate'],
+                            ),
                       ),
                     ));
                     getData();
@@ -203,8 +201,10 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                       ),
                     ],
                   ),
-                )),
+                ),
+            ),
           ),
-        ));
+        ),
+    );
   }
 }
